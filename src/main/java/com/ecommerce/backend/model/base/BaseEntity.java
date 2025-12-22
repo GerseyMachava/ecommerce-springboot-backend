@@ -20,13 +20,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-@NoArgsConstructor
-@AllArgsConstructor
+
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-@MappedSuperclass
-@SuperBuilder
-@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
     @Id
@@ -34,16 +32,16 @@ public abstract class BaseEntity {
     private Long id;
 
     @CreatedDate
-    @Column(updatable = false, nullable = false)
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column
-    private LocalDateTime updatedByAt;
+    private LocalDateTime updatedAt;
 
     @CreatedBy
-    private long createdBy;
+    private Long createdBy;
     @LastModifiedBy
-    private long updatedBy;
+    private Long updatedBy;
 
 }

@@ -6,21 +6,29 @@ import com.ecommerce.backend.model.base.BaseEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 @Entity
 public class Product extends BaseEntity{
 
+    @NotBlank(message = "The name can not be null")
     private String name;
-    private String descripction;
+    @NotBlank(message = "The Description can not be null")
+    private String description;
+    @NotNull(message = "The price can not be null")
     private double price;
+    @NotNull(message = "The stock Quantity can not be null")
     private int stockQuantity;
 
     @OneToMany(mappedBy = "product")
