@@ -1,0 +1,1 @@
+/*INSERT INTO USERS (name,email,password,role) values (Carlos,Carlos@gamil.com,12344321,guest);

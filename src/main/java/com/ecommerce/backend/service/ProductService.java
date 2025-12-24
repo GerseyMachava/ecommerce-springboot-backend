@@ -4,6 +4,7 @@ import javax.imageio.IIOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.backend.dto.ResponseDto.ProductResponseDto;
 import com.ecommerce.backend.dto.requestDto.ProductRequestDto;
@@ -18,6 +19,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Service
+@Transactional
 public class ProductService implements IProductService {
 
     private ProductRepository productRepository;
@@ -36,7 +38,8 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductResponseDto findProductById(Long id) {
-        Product product = productRepository.findById(id)
+        Product product = productRepository.findById(
+                id)
                 .orElseThrow(() -> new EntityNotFoundException("No product found with the id " + id));
         return productMapper.toResponseDto(product);
 
