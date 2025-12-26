@@ -36,34 +36,43 @@ public class ProductController {
             @RequestBody @Valid ProductRequestDto requestDto) {
         return ResponseEntity.status(
                 HttpStatus.CREATED).body(
-                        ApiResponse.<ProductResponseDto>builder()
-                                .status(ApiStatus.SUCCESS)
-                                .message("Product Created Successfuly!")
-                                .data(productService.createProduct(requestDto))
-                                .build());
+                        ApiResponse.success("Product Created", productService.createProduct(requestDto),
+                                HttpStatus.CREATED));
+
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ProductResponseDto>> findProductById(@PathVariable(name = "id") long id) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                ApiResponse.success(true, "Product found successfully", productService.findProductById(id),
+                ApiResponse.success("Product found successfully", productService.findProductById(id),
                         HttpStatus.OK));
     }
 
     @GetMapping("/getByName/{name}")
-    public ResponseEntity<ProductResponseDto> findProductByName(@PathVariable(name = "name") String name) {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.findProductByName(name));
+    public ResponseEntity<ApiResponse<ProductResponseDto>> findProductByName(@PathVariable(name = "name") String name) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ApiResponse.success("Product found successfully", productService.findProductByName(name),
+                        HttpStatus.OK));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDto> updateProduct(@RequestBody @Valid ProductRequestDto requestDto,
+    public ResponseEntity<ApiResponse<ProductResponseDto>> updateProduct(
+            @RequestBody @Valid ProductRequestDto requestDto,
             @PathVariable(name = "id") long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.updateProduct(requestDto, id));
+        return ResponseEntity.status(
+                HttpStatus.OK).body(
+                        ApiResponse.success("Product updated", productService.updateProduct(requestDto, id),
+                                HttpStatus.OK));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMapping(@PathVariable(name = "id") long id) {
+    public ResponseEntity<ApiResponse<?>> deleteMapping(@PathVariable(name = "id") long id) {
         productService.deleteProduct(id);
+        return ResponseEntity.status(
+                HttpStatus.OK).body(
+                        ApiResponse.success("Product deleted", null,
+                                HttpStatus.OK));
+
     }
 
 }

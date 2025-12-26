@@ -3,6 +3,7 @@ package com.ecommerce.backend.service;
 import javax.imageio.IIOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +30,7 @@ public class ProductService implements IProductService {
     @Override
     public ProductResponseDto createProduct(ProductRequestDto requestDto) {
         if (productRepository.existsByName(requestDto.name())) {
-            throw new BusinessException("Product name already exists");
+            throw new BusinessException("Product name already exists", HttpStatus.CONFLICT);
         }
         Product product = productMapper.toEntity(requestDto);
         return productMapper.toResponseDto(productRepository.save(product));
@@ -39,7 +40,7 @@ public class ProductService implements IProductService {
     @Override
     public ProductResponseDto findProductById(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("No product found with the id " + id));
+                .orElseThrow(() -> new BusinessException("No product found with the id " + id, HttpStatus.NOT_FOUND));
         return productMapper.toResponseDto(product);
 
     }
@@ -47,7 +48,8 @@ public class ProductService implements IProductService {
     @Override
     public ProductResponseDto findProductByName(String name) {
         Product product = productRepository.findByName(name)
-                .orElseThrow(() -> new EntityNotFoundException("No product found with the name " + name));
+                .orElseThrow(
+                        () -> new BusinessException("No product found with the name " + name, HttpStatus.NOT_FOUND));
         return productMapper.toResponseDto(product);
 
     }
@@ -55,7 +57,7 @@ public class ProductService implements IProductService {
     @Override
     public ProductResponseDto updateProduct(ProductRequestDto requestDto, long id) {
         Product existingProduct = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("No product found with the id " + id));
+                .orElseThrow(() -> new BusinessException("No product found with the id " + id, HttpStatus.NOT_FOUND));
 
         productMapper.updateEntity(existingProduct, requestDto);
         return productMapper.toResponseDto(productRepository.save(existingProduct));
@@ -67,7 +69,7 @@ public class ProductService implements IProductService {
         productRepository.findById(id).ifPresentOrElse(
                 productRepository::delete,
                 () -> {
-                    throw new EntityNotFoundException("No product found with the id " + id);
+                    throw new BusinessException("No product found with the id " + id, HttpStatus.NOT_FOUND);
                 });
     }
 

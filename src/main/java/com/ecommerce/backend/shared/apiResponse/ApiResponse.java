@@ -3,6 +3,7 @@ package com.ecommerce.backend.shared.apiResponse;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -29,33 +30,31 @@ public class ApiResponse<T> {
     private String message;
     private String httpStatus;
     private Instant timestamp;
-    private List<String> error;
+    private Object error;
 
-    public ApiResponse(ApiStatus status, String message, T data, Instant timestamp, String httpStatus) {
-        this.timestamp = timestamp;
-        this.status = status;
-        this.message = message;
-        this.data = data;
-        this.httpStatus = httpStatus;
-    }
+    public static <T> ApiResponse<T> success(String message, T data, HttpStatusCode httpStatus) {
 
-    public ApiResponse(ApiStatus status, String message, Instant timestamp,
-            List<String> error) {
-        this.status = status;
-        this.message = message;
-
-        this.timestamp = timestamp;
-        this.error = error;
-    }
-
-    public static <T> ApiResponse<T> success(boolean status, String message, T data, HttpStatusCode httpStatus) {
-        ApiStatus apiStatus = status ? ApiStatus.SUCCESS : ApiStatus.ERROR;
         return new ApiResponse<>(
-                apiStatus,
-                message,
+                ApiStatus.SUCCESS,
                 data,
+                message,
+                httpStatus.toString(),
                 Instant.now(),
-                httpStatus.toString()
+                null
+
+        );
+
+    }
+
+    public static <T> ApiResponse<T> error(String message, HttpStatusCode httpStatus, Object errorDetails) {
+
+        return new ApiResponse<>(
+                ApiStatus.ERROR,
+                null,
+                message,
+                httpStatus.toString(),
+                Instant.now(),
+                errorDetails
 
         );
 
