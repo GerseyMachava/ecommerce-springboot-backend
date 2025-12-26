@@ -8,11 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.backend.dto.ResponseDto.ProductResponseDto;
 import com.ecommerce.backend.dto.requestDto.ProductRequestDto;
-import com.ecommerce.backend.exception.BusinessException;
 import com.ecommerce.backend.mapper.ProductMapper;
 import com.ecommerce.backend.model.Product;
 import com.ecommerce.backend.repository.ProductRepository;
 import com.ecommerce.backend.service.interfaces.IProductService;
+import com.ecommerce.backend.shared.exception.BusinessException;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -38,8 +38,7 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductResponseDto findProductById(Long id) {
-        Product product = productRepository.findById(
-                id)
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No product found with the id " + id));
         return productMapper.toResponseDto(product);
 

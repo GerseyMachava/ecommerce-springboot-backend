@@ -1,4 +1,4 @@
-package com.ecommerce.backend.exception;
+package com.ecommerce.backend.shared.exception;
 
 public class BusinessException extends RuntimeException {
 
