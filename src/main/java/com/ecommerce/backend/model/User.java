@@ -13,15 +13,20 @@ import com.ecommerce.backend.model.enums.UserRole;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @Getter
@@ -32,8 +37,10 @@ import lombok.Setter;
 @Table(name = "users")
 public class User extends BaseEntity implements UserDetails {
     @Column(unique = true)
+    @Email
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     public User(String email, String password, UserRole role) {

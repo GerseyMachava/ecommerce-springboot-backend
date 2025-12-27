@@ -3,6 +3,7 @@ package com.ecommerce.backend.controller;
 import com.ecommerce.backend.dto.ResponseDto.LoginResopnseDto;
 import com.ecommerce.backend.security.TokenService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,7 +34,7 @@ public class AuthenticationController {
 
         var userNamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = this.authenticationManager.authenticate(userNamePassword);
-        var token = tokenService.generateToken((User)auth.getPrincipal());
+        var token = tokenService.generateToken((User) auth.getPrincipal());
         return ResponseEntity.ok(new LoginResopnseDto(token));
     }
 

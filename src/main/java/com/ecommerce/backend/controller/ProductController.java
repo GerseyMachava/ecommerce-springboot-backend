@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +31,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
-
+ 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping()
     public ResponseEntity<ApiResponse<ProductResponseDto>> createProduct(
             @RequestBody @Valid ProductRequestDto requestDto) {
@@ -40,21 +42,21 @@ public class ProductController {
                                 HttpStatus.CREATED));
 
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_CUSTOMER' )")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ProductResponseDto>> findProductById(@PathVariable(name = "id") long id) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 ApiResponse.success("Product found successfully", productService.findProductById(id),
                         HttpStatus.OK));
     }
-
+        @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_CUSTOMER' )")
     @GetMapping("/getByName/{name}")
     public ResponseEntity<ApiResponse<ProductResponseDto>> findProductByName(@PathVariable(name = "name") String name) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 ApiResponse.success("Product found successfully", productService.findProductByName(name),
                         HttpStatus.OK));
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ProductResponseDto>> updateProduct(
             @RequestBody @Valid ProductRequestDto requestDto,
@@ -64,7 +66,7 @@ public class ProductController {
                         ApiResponse.success("Product updated", productService.updateProduct(requestDto, id),
                                 HttpStatus.OK));
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> deleteMapping(@PathVariable(name = "id") long id) {
         productService.deleteProduct(id);
