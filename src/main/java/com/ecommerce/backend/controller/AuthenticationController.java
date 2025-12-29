@@ -1,6 +1,7 @@
 package com.ecommerce.backend.controller;
 
 import com.ecommerce.backend.dto.ResponseDto.LoginResopnseDto;
+import com.ecommerce.backend.security.AuthenticationService;
 import com.ecommerce.backend.security.TokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +21,8 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("auth")
@@ -47,6 +50,11 @@ public class AuthenticationController {
         User newUser = new User(registerRequestDto.email(), encryptedPassword, registerRequestDto.role());
         this.userRepository.save(newUser);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/getUserName")
+    public String getUserName() {
+        return new AuthenticationService().getLoggedUserName();
     }
 
 }

@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -40,8 +39,8 @@ public abstract class BaseEntity {
     private LocalDateTime updatedAt;
 
     @CreatedBy
-    private Long createdBy;
+    private String createdBy;
     @LastModifiedBy
-    private Long updatedBy;
+    private String updatedBy;
 
 }
