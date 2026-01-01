@@ -1,60 +1,52 @@
 package com.ecommerce.backend.controller;
 
-import com.ecommerce.backend.dto.ResponseDto.LoginResopnseDto;
+import com.ecommerce.backend.dto.ResponseDto.LoginResponseDto;
+import com.ecommerce.backend.dto.ResponseDto.UserResponseDto;
 import com.ecommerce.backend.security.AuthenticationService;
-import com.ecommerce.backend.security.TokenService;
+import com.ecommerce.backend.security.SecurityService;
+import com.ecommerce.backend.shared.apiResponse.ApiResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.ecommerce.backend.dto.requestDto.AuthenticationRequestDto;
 import com.ecommerce.backend.dto.requestDto.RegisterRequestDto;
-import com.ecommerce.backend.model.User;
-import com.ecommerce.backend.repository.UserRepository;
-
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 @RestController
 @RequestMapping("auth")
 @AllArgsConstructor
 public class AuthenticationController {
-    private TokenService tokenService;
-    private AuthenticationManager authenticationManager;
-    private UserRepository userRepository;
+    private AuthenticationService authService;
+    private SecurityService securityService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationRequestDto data) {
+    public ResponseEntity<ApiResponse<LoginResponseDto>> login(@RequestBody @Valid AuthenticationRequestDto data) {
+        return ResponseEntity.status(
+                HttpStatus.OK).body(
+                        ApiResponse.success("Logged in successfuly", authService.login(data), HttpStatus.OK));
 
-        var userNamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
-        var auth = this.authenticationManager.authenticate(userNamePassword);
-        var token = tokenService.generateToken((User) auth.getPrincipal());
-        return ResponseEntity.ok(new LoginResopnseDto(token));
     }
-
     @PostMapping("/register")
     @Transactional
-    public ResponseEntity register(@RequestBody @Valid RegisterRequestDto registerRequestDto) {
-        if (this.userRepository.findByEmail(registerRequestDto.email()) != null)
-            return ResponseEntity.badRequest().build();
-        String encryptedPassword = new BCryptPasswordEncoder().encode(registerRequestDto.password());
-        User newUser = new User(registerRequestDto.email(), encryptedPassword, registerRequestDto.role());
-        this.userRepository.save(newUser);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ApiResponse<UserResponseDto>> register(
+            @RequestBody @Valid RegisterRequestDto registerRequestDto) {
+        return ResponseEntity.status(
+                HttpStatus.OK).body(
+                        ApiResponse.success("registed successfuly", authService.register(registerRequestDto),
+                                HttpStatus.OK));
+
     }
 
-    @GetMapping("/getUserName")
-    public String getUserName() {
-        return new AuthenticationService().getLoggedUserName();
+   @GetMapping("/getUserName")
+    public ResponseEntity<String> getUserName() {
+        return securityService.getAuthenticatedUser()
+                .map(user -> ResponseEntity.ok(user.getUsername())) // Retorna apenas o nome
+                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
 }
