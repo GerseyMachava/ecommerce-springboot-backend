@@ -3,6 +3,7 @@ package com.ecommerce.backend.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.backend.dto.ResponseDto.ProductResponseDto;
+import com.ecommerce.backend.dto.ResponseDto.ProductResponseListDto;
 import com.ecommerce.backend.dto.requestDto.ProductRequestDto;
 import com.ecommerce.backend.model.enums.ApiStatus;
 import com.ecommerce.backend.service.ProductService;
@@ -12,7 +13,12 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -30,51 +36,74 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private final ProductService productService;
- 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping()
-    public ResponseEntity<ApiResponse<ProductResponseDto>> createProduct(
-            @RequestBody @Valid ProductRequestDto requestDto) {
-        return ResponseEntity.status(
-                HttpStatus.CREATED).body(
-                        ApiResponse.success("Product Created", productService.createProduct(requestDto),
-                                HttpStatus.CREATED));
+        private final ProductService productService;
 
-    }
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_CUSTOMER' )")
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ProductResponseDto>> findProductById(@PathVariable(name = "id") long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(
-                ApiResponse.success("Product found successfully", productService.findProductById(id),
-                        HttpStatus.OK));
-    }
+        @GetMapping()
+        public ResponseEntity<ApiResponse<ProductResponseListDto>> index(
+                        @PageableDefault(sort = "name", direction = Sort.Direction.ASC, size = 10) Pageable pageable) {
+                var data = productService.getAllProducts(pageable);
+                return ResponseEntity.status(
+                                HttpStatus.OK).body(
+                                                ApiResponse.success("All products fetched successfuly",
+                                                                data,
+                                                                HttpStatus.OK));
+
+        }
+
+        @PreAuthorize("hasRole('ROLE_ADMIN')")
+        @PostMapping()
+        public ResponseEntity<ApiResponse<ProductResponseDto>> createProduct(
+                        @RequestBody @Valid ProductRequestDto requestDto) {
+                return ResponseEntity.status(
+                                HttpStatus.CREATED).body(
+                                                ApiResponse.success("Product Created",
+                                                                productService.createProduct(requestDto),
+                                                                HttpStatus.CREATED));
+
+        }
+
         @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_CUSTOMER' )")
-    @GetMapping("/getByName/{name}")
-    public ResponseEntity<ApiResponse<ProductResponseDto>> findProductByName(@PathVariable(name = "name") String name) {
-        return ResponseEntity.status(HttpStatus.OK).body(
-                ApiResponse.success("Product found successfully", productService.findProductByName(name),
-                        HttpStatus.OK));
-    }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<ProductResponseDto>> updateProduct(
-            @RequestBody @Valid ProductRequestDto requestDto,
-            @PathVariable(name = "id") long id) {
-        return ResponseEntity.status(
-                HttpStatus.OK).body(
-                        ApiResponse.success("Product updated", productService.updateProduct(requestDto, id),
-                                HttpStatus.OK));
-    }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> deleteMapping(@PathVariable(name = "id") long id) {
-        productService.deleteProduct(id);
-        return ResponseEntity.status(
-                HttpStatus.OK).body(
-                        ApiResponse.success("Product deleted", null,
-                                HttpStatus.OK));
+        @GetMapping("/{id}")
+        public ResponseEntity<ApiResponse<ProductResponseDto>> findProductById(@PathVariable(name = "id") long id) {
+                return ResponseEntity.status(HttpStatus.OK).body(
+                                ApiResponse.success("Product found successfully", productService.findProductById(id),
+                                                HttpStatus.OK));
+        }
 
-    }
+        @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_CUSTOMER' )")
+        @GetMapping("/search")
+        public ResponseEntity<ApiResponse<ProductResponseListDto>> search(
+                        @RequestParam(required = false) String name,
+                        @RequestParam(required = false) Double maxPrice,
+                        @PageableDefault(sort = "name") Pageable pageable) {
+                var result = productService.searchProducts(name, maxPrice, pageable);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                                ApiResponse.success("Search completed",
+                                                result,
+                                                HttpStatus.OK));
+        }
+
+        @PreAuthorize("hasRole('ROLE_ADMIN')")
+        @PutMapping("/{id}")
+        public ResponseEntity<ApiResponse<ProductResponseDto>> updateProduct(
+                        @RequestBody @Valid ProductRequestDto requestDto,
+                        @PathVariable(name = "id") long id) {
+                return ResponseEntity.status(
+                                HttpStatus.OK).body(
+                                                ApiResponse.success("Product updated",
+                                                                productService.updateProduct(requestDto, id),
+                                                                HttpStatus.OK));
+        }
+
+        @PreAuthorize("hasRole('ROLE_ADMIN')")
+        @DeleteMapping("/{id}")
+        public ResponseEntity<ApiResponse<?>> deleteMapping(@PathVariable(name = "id") long id) {
+                productService.deleteProduct(id);
+                return ResponseEntity.status(
+                                HttpStatus.OK).body(
+                                                ApiResponse.success("Product deleted", null,
+                                                                HttpStatus.OK));
+
+        }
 
 }

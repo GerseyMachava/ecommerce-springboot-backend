@@ -1,13 +1,20 @@
 package com.ecommerce.backend.service;
 
+import java.util.List;
+
 import javax.imageio.IIOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.backend.dto.ResponseDto.ProductResponseDto;
+import com.ecommerce.backend.dto.ResponseDto.ProductResponseListDto;
 import com.ecommerce.backend.dto.requestDto.ProductRequestDto;
 import com.ecommerce.backend.mapper.ProductMapper;
 import com.ecommerce.backend.model.Product;
@@ -28,6 +35,14 @@ public class ProductService implements IProductService {
     private final ProductMapper productMapper;
 
     @Override
+    public ProductResponseListDto getAllProducts(Pageable pageable) {
+        Page<Product> pagedProducts = productRepository.findAll(pageable);
+
+        return productMapper.toResponseListDto(pagedProducts);
+
+    }
+
+    @Override
     public ProductResponseDto createProduct(ProductRequestDto requestDto) {
         if (productRepository.existsByName(requestDto.name())) {
             throw new BusinessException("Product name already exists", HttpStatus.CONFLICT);
@@ -46,11 +61,13 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ProductResponseDto findProductByName(String name) {
-        Product product = productRepository.findByName(name)
-                .orElseThrow(
-                        () -> new BusinessException("No product found with the name " + name, HttpStatus.NOT_FOUND));
-        return productMapper.toResponseDto(product);
+    public ProductResponseListDto searchProducts(String name, Double maxPrice, Pageable pageable) {
+        Double priceFilter = (maxPrice != null) ? maxPrice : Double.MAX_VALUE;
+        String nameFilter = (name != null) ? name : "";
+        Page<Product> pagedProducts = productRepository
+                .findByNameContainingIgnoreCaseAndPriceLessThanEqual(nameFilter, priceFilter, pageable);
+        ;
+        return productMapper.toResponseListDto(pagedProducts);
 
     }
 

@@ -4,21 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.ecommerce.backend.model.enums.ApiStatus;
 import com.ecommerce.backend.shared.apiResponse.ApiResponse;
 
 @ControllerAdvice
@@ -67,9 +65,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @ExceptionHandler(BadCredentialsException.class)
         public ResponseEntity<Object> badCredentialsExceptionHandler(BadCredentialsException ex) {
                 return ResponseEntity.status(
-                                HttpStatus.FORBIDDEN).body(
+                                HttpStatus.UNAUTHORIZED).body(
                                                 ApiResponse.error("Incorrect Credentials.",
                                                                 HttpStatus.UNAUTHORIZED,
+                                                                ex.getClass().getSimpleName()));
+        }
+
+        @ExceptionHandler(PropertyReferenceException.class)
+        public ResponseEntity<Object> PropertyReferenceExceptionHandler(PropertyReferenceException ex) {
+                String message = String.format("Invalid sorting field: '%s'.", ex.getPropertyName());
+                return ResponseEntity.status(
+                                HttpStatus.BAD_REQUEST).body(
+                                                ApiResponse.error(
+                                                                message,
+                                                                HttpStatus.BAD_REQUEST,
                                                                 ex.getClass().getSimpleName()));
         }
 
