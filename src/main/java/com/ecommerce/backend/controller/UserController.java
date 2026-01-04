@@ -36,6 +36,7 @@ public class UserController {
     @GetMapping()
     public ResponseEntity<ApiResponse<List<UserResponseDto>>> getAllUsers() {
         List<UserResponseDto> usersList = userService.getAllUsers();
+     
         String message = usersList.isEmpty() ? "No users found" : "All users fetched successfully";
         return ResponseEntity.status(HttpStatus.OK).body(
                 ApiResponse.success(message, usersList, HttpStatus.OK));
