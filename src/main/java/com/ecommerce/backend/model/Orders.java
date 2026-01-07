@@ -5,7 +5,7 @@ import java.util.List;
 import com.ecommerce.backend.model.base.BaseEntity;
 import com.ecommerce.backend.model.enums.OrderStatus;
 
-import jakarta.persistence.CascadeType;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

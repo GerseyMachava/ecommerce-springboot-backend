@@ -1,8 +1,6 @@
 package com.ecommerce.backend.service.interfaces;
 
-import java.util.List;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.ecommerce.backend.dto.ResponseDto.ProductResponseDto;

@@ -1,16 +1,14 @@
 package com.ecommerce.backend.model;
 
 import java.time.LocalDate;
-import java.util.List;
+
 
 import com.ecommerce.backend.model.base.BaseEntity;
 import com.ecommerce.backend.model.enums.PaymentStatus;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToMany;
+
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;

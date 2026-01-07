@@ -17,6 +17,7 @@ import com.ecommerce.backend.dto.ResponseDto.ProductResponseDto;
 import com.ecommerce.backend.dto.ResponseDto.ProductResponseListDto;
 import com.ecommerce.backend.dto.requestDto.ProductRequestDto;
 import com.ecommerce.backend.mapper.ProductMapper;
+import com.ecommerce.backend.model.Category;
 import com.ecommerce.backend.model.Product;
 import com.ecommerce.backend.repository.ProductRepository;
 import com.ecommerce.backend.service.interfaces.IProductService;
@@ -88,6 +89,13 @@ public class ProductService implements IProductService {
                 () -> {
                     throw new BusinessException("No product found with the id " + id, HttpStatus.NOT_FOUND);
                 });
+    }
+
+    public Product getProduct(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(
+                () -> new BusinessException("No  product found with the id " + id,
+                        HttpStatus.NOT_FOUND));
+        return product;
     }
 
 }

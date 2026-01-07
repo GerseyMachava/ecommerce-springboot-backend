@@ -62,7 +62,7 @@ public class CategoryService implements ICategoryService {
         Category existingCategory = categoryRepository.findById(existingCategoryId).orElseThrow(
                 () -> new BusinessException("No Category found with the id " + requestDto.parentCategoryId(),
                         HttpStatus.NOT_FOUND));
-        if (categoryRepository.existsByNameAndIdNot(requestDto.name(),existingCategory.getId())) {
+        if (categoryRepository.existsByNameAndIdNot(requestDto.name(), existingCategory.getId())) {
             throw new BusinessException("category with the name " + requestDto.name() + " Already exists",
                     HttpStatus.CONFLICT);
         }
@@ -86,6 +86,13 @@ public class CategoryService implements ICategoryService {
                     throw new BusinessException("No category found with the id " + id, HttpStatus.NOT_FOUND);
 
                 });
+    }
+
+    public Category getCategory(Long id) {
+        Category category = categoryRepository.findById(id).orElseThrow(
+                () -> new BusinessException("No  Category found with the id " + id,
+                        HttpStatus.NOT_FOUND));
+        return category;
     }
 
 }
