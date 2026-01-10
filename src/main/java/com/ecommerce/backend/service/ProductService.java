@@ -67,7 +67,7 @@ public class ProductService implements IProductService {
         String nameFilter = (name != null) ? name : "";
         Page<Product> pagedProducts = productRepository
                 .findByNameContainingIgnoreCaseAndPriceLessThanEqual(nameFilter, priceFilter, pageable);
-        ;
+        
         return productMapper.toResponseListDto(pagedProducts);
 
     }
