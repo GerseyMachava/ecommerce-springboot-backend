@@ -1,12 +1,10 @@
 package com.ecommerce.backend.mapper;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
 import com.ecommerce.backend.dto.ResponseDto.ProductResponseDto;
 import com.ecommerce.backend.dto.ResponseDto.ProductResponseListDto;
 import com.ecommerce.backend.dto.requestDto.ProductRequestDto;
@@ -44,13 +42,16 @@ public class ProductMapper {
         return product;
     }
 
-    /*public List<ProductResponseDto> toListResponseDto(List<Product> listProduct) {
-        return listProduct.stream()
-                .map(this::toResponseDto)
-                .collect(Collectors.toList());
-
-    }
-                /* */
+    /*
+     * public List<ProductResponseDto> toListResponseDto(List<Product> listProduct)
+     * {
+     * return listProduct.stream()
+     * .map(this::toResponseDto)
+     * .collect(Collectors.toList());
+     * 
+     * }
+     * /*
+     */
 
     public ProductResponseListDto toResponseListDto(Page<Product> pagedProduct) {
         List<ProductResponseDto> dtos = pagedProduct.getContent().stream()

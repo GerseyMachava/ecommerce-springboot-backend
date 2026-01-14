@@ -1,11 +1,7 @@
 package com.ecommerce.backend.shared.apiResponse;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 

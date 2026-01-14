@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.ecommerce.backend.dto.ResponseDto.UserResponseDto;
-import com.ecommerce.backend.dto.requestDto.AuthenticationRequestDto;
 import com.ecommerce.backend.model.User;
 
 import lombok.AllArgsConstructor;

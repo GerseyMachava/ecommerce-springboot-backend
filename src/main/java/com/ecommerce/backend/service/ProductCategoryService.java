@@ -11,10 +11,8 @@ import com.ecommerce.backend.mapper.ProductCategoryMapper;
 import com.ecommerce.backend.model.Category;
 import com.ecommerce.backend.model.Product;
 import com.ecommerce.backend.model.ProductCategory;
-import com.ecommerce.backend.repository.CategoryRepository;
 import com.ecommerce.backend.repository.ProductCategoryRepository;
 import com.ecommerce.backend.service.interfaces.IProductCategoryService;
-import com.ecommerce.backend.service.interfaces.IProductService;
 import com.ecommerce.backend.shared.exception.BusinessException;
 
 import lombok.AllArgsConstructor;

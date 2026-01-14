@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.backend.dto.ResponseDto.UserResponseDto;
-import com.ecommerce.backend.dto.requestDto.AuthenticationRequestDto;
 import com.ecommerce.backend.dto.requestDto.RegisterRequestDto;
 import com.ecommerce.backend.dto.requestDto.UserPasswordUpdateRequestDto;
 import com.ecommerce.backend.mapper.UserMapper;

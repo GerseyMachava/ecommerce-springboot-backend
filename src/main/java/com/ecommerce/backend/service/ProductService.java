@@ -1,14 +1,7 @@
 package com.ecommerce.backend.service;
 
-import java.util.List;
-
-import javax.imageio.IIOException;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +10,11 @@ import com.ecommerce.backend.dto.ResponseDto.ProductResponseDto;
 import com.ecommerce.backend.dto.ResponseDto.ProductResponseListDto;
 import com.ecommerce.backend.dto.requestDto.ProductRequestDto;
 import com.ecommerce.backend.mapper.ProductMapper;
-import com.ecommerce.backend.model.Category;
 import com.ecommerce.backend.model.Product;
 import com.ecommerce.backend.repository.ProductRepository;
 import com.ecommerce.backend.service.interfaces.IProductService;
 import com.ecommerce.backend.shared.exception.BusinessException;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
