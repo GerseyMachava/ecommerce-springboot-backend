@@ -48,7 +48,7 @@ public class User extends BaseEntity implements UserDetails {
     List<Address> adress;
 
     @OneToMany(mappedBy = "user")
-    List<Orders> order;
+    List<Order> order;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

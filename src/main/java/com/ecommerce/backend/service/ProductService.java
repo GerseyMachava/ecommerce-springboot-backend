@@ -89,4 +89,10 @@ public class ProductService implements IProductService {
         return product;
     }
 
+
+    public void updateStockQuantity(Long productId, int takenQuantity){
+        Product product = getProduct(productId);
+        product.setStockQuantity(product.getStockQuantity()-takenQuantity);
+        productRepository.save(product);
+    }
 }

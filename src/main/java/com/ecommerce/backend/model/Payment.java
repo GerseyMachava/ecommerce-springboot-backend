@@ -2,13 +2,11 @@ package com.ecommerce.backend.model;
 
 import java.time.LocalDate;
 
-
 import com.ecommerce.backend.model.base.BaseEntity;
 import com.ecommerce.backend.model.enums.PaymentStatus;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -29,9 +27,7 @@ public class Payment extends BaseEntity {
     private LocalDate paidAt;
     private PaymentStatus status;
 
-    @OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
-    private Orders order;
-
-
+    @OneToOne(mappedBy = "payment")
+    private Order order;
 
 }

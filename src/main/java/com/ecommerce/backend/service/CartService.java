@@ -30,7 +30,7 @@ public class CartService {
             return cartRepository.save(newCart);
         } catch (DataIntegrityViolationException e) {
             return cartRepository.findByUser(user)
-                    .orElseThrow(() -> new BusinessException("Erro ao recuperar carrinho",
+                    .orElseThrow(() -> new BusinessException("Error while founding the user cart",
                             HttpStatus.INTERNAL_SERVER_ERROR));
         }
     }

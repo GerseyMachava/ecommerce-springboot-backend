@@ -1,8 +1,11 @@
 package com.ecommerce.backend.model;
 
+import java.math.BigDecimal;
+
 import com.ecommerce.backend.model.base.BaseEntity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
@@ -13,27 +16,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
 @Entity
-@Table(name = "orederItems")
-public class OrderItem extends BaseEntity{
+@Table(name = "orderItems")
+public class OrderItem extends BaseEntity {
 
     private int quantity;
-    private double unitPrice;
+    private BigDecimal unitPrice;
+    private Long productId;
+    private String productName;
 
-
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Orders order;
-
-    
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
 }

@@ -44,7 +44,4 @@ public class Product extends BaseEntity{
     @OneToMany(mappedBy = "product")
     List<ProductImage> productImage;
 
-    @OneToMany(mappedBy = "product")
-    List<OrderItem> orderItem;
-
 }

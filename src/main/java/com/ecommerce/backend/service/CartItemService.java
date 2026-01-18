@@ -73,11 +73,16 @@ public class CartItemService {
     }
 
     public List<CartItemResponseDto> getAuthCartItems() {
+        List<CartItem> cartItems = getCartitems();
+        return cartItems.stream().map(
+                cartItem -> mapper.toResponseDto(cartItem, cartItem.getQuantity())).toList();
+    }
+
+    public List<CartItem> getCartitems() {
         User user = securityService.getAuthenticatedUser()
                 .orElseThrow(() -> new BusinessException("User not found ", HttpStatus.NOT_FOUND));
         List<CartItem> cartItems = repository.findByCartUser(user);
-        return cartItems.stream().map(
-                cartItem -> mapper.toResponseDto(cartItem, cartItem.getQuantity())).toList();
+        return cartItems;
     }
 
     public void deleteCartItem(Long cartItemId) {
