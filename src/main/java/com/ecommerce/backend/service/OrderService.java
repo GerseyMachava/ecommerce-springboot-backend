@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.backend.dto.ResponseDto.OrderResponseDto;
+import com.ecommerce.backend.dto.requestDto.OrderStatusRequestDto;
 import com.ecommerce.backend.mapper.OrderMapper;
 import com.ecommerce.backend.model.CartItem;
 import com.ecommerce.backend.model.Order;
@@ -37,6 +38,16 @@ public class OrderService {
                         HttpStatus.NOT_FOUND));
         List<Order> userOrderList = orderRepository.findAllByUser(user);
         return userOrderList.stream().map(order -> orderMapper.toResponseDto(order)).toList();
+    }
+
+    public OrderResponseDto toogleOrderStatus(OrderStatusRequestDto statusRequestDto) {
+        Order existingOrder = orderRepository.findById(statusRequestDto.orderId()).orElseThrow(
+                () -> new BusinessException("Order not found. Id: " + statusRequestDto.orderId(),
+                        HttpStatus.NOT_FOUND));
+
+        existingOrder.setStatus(statusRequestDto.status());
+        orderRepository.save(existingOrder);
+        return orderMapper.toResponseDto(existingOrder);
     }
 
     @Transactional
