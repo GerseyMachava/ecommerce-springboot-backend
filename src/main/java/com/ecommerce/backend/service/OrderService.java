@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,12 +33,14 @@ public class OrderService {
     private OrderRepository orderRepository;
     private ProductService productService;
     private OrderMapper orderMapper;
+ 
 
     public List<OrderResponseDto> getAuthUserOrders() {
         User user = securityService.getAuthenticatedUser()
                 .orElseThrow(() -> new BusinessException("user not found",
                         HttpStatus.NOT_FOUND));
         List<Order> userOrderList = orderRepository.findAllByUser(user);
+
         return userOrderList.stream().map(order -> orderMapper.toResponseDto(order)).toList();
     }
 
@@ -48,6 +52,11 @@ public class OrderService {
         existingOrder.setStatus(statusRequestDto.status());
         orderRepository.save(existingOrder);
         return orderMapper.toResponseDto(existingOrder);
+    }
+
+    public Order findOrderByid(Long id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("No order found with the id: " + id, HttpStatus.NOT_FOUND));
     }
 
     @Transactional

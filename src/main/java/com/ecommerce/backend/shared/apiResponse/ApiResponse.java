@@ -42,6 +42,7 @@ public class ApiResponse<T> {
 
     }
 
+
     public static <T> ApiResponse<T> error(String message, HttpStatusCode httpStatus, Object errorDetails) {
 
         return new ApiResponse<>(
