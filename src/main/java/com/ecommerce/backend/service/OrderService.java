@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +31,6 @@ public class OrderService {
     private OrderRepository orderRepository;
     private ProductService productService;
     private OrderMapper orderMapper;
- 
 
     public List<OrderResponseDto> getAuthUserOrders() {
         User user = securityService.getAuthenticatedUser()
