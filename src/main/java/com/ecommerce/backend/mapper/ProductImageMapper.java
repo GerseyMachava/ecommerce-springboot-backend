@@ -3,7 +3,6 @@ package com.ecommerce.backend.mapper;
 import java.io.IOException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,16 +12,13 @@ import com.ecommerce.backend.model.ProductImage;
 
 @Component
 public class ProductImageMapper {
-    @Value("${file.upload-dir}")
-    private String uploadDir;
 
-    public ProductImage toEntity(MultipartFile file, Product product) throws IOException {
+    public ProductImage toEntity(MultipartFile file, Product product, String filePath) throws IOException {
         ProductImage productImage = ProductImage.builder()
                 .imageName(file.getOriginalFilename())
                 .imgType(file.getContentType())
-                .imgData(file.getBytes())
+                .url(filePath)
                 .product(product)
-                .url(uploadDir)
                 .build();
         return productImage;
     }
@@ -32,6 +28,7 @@ public class ProductImageMapper {
                 productImage.getId(),
                 productImage.getImageName(),
                 productImage.getImgType(),
+                productImage.getUrl(),
                 productImage.getProduct().getId());
         return responseDto;
     }

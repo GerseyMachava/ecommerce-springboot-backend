@@ -26,7 +26,7 @@ import lombok.AllArgsConstructor;
 public class ProductImageController {
     private ProductImageService service;
 
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping()
     public ResponseEntity<ApiResponse<ProductImageResponseDto>> uploadImage(@RequestParam Long productId,
             MultipartFile file) {
@@ -42,7 +42,7 @@ public class ProductImageController {
 
     }
 
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{productId}")
     public ResponseEntity<ApiResponse<List<ProductImageResponseDto>>> getProductImage(@PathVariable Long productId) {
         List<ProductImageResponseDto> data = service.getAllProductImages(productId);

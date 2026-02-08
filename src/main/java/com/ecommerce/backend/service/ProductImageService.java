@@ -1,8 +1,14 @@
 package com.ecommerce.backend.service;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +27,9 @@ public class ProductImageService {
     // Limite: 5MB (em bytes)
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
 
+    @Value("${file.upload-dir:uploads/images}")
+    private String uploadDir;
+
     private ProductService productService;
     private ProductImageRepository repository;
     private ProductImageMapper mapper;
@@ -38,7 +47,19 @@ public class ProductImageService {
         
         Product product = productService.getProduct(productid);
 
-        ProductImage newProductImage = mapper.toEntity(file, product);
+        // Gerar nome único para o arquivo
+        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+        String filePath = uploadDir + File.separator + fileName;
+
+        // Criar diretório se não existir
+        Files.createDirectories(Paths.get(uploadDir));
+
+        // Salvar arquivo no disco
+        Path path = Paths.get(filePath);
+        Files.write(path, file.getBytes());
+
+        // Salvar referência no banco de dados
+        ProductImage newProductImage = mapper.toEntity(file, product, filePath);
         repository.save(newProductImage);
         return mapper.toResponseDto(newProductImage);
 
