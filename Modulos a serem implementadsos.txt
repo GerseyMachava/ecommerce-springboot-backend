@@ -34,4 +34,4 @@ Módulos:
 
 **Lembre-se:** O objetivo não é apenas funcionar, mas demonstrar **bom senso técnico** e **capacidade de tomar decisões arquiteturais**.
 
-Quer começar com alguma dúvida específica ou prefere que aprofundemos algum tópico?
+Quer começar com alguma dúvida específica ou prefere que aprofundemos algum tópico?3333

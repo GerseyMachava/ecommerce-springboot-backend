@@ -244,7 +244,6 @@ UserServiceTest
 CartServiceTest
 AuthenticationControllerTest
 🟠 IMPORTANTE:
-
 OrderControllerTest
 CartItemServiceTest
 PaymentServiceTest
@@ -254,4 +253,4 @@ RepositoryTests
 SecurityTests
 Testes de validação de DTOs
 Quer que eu comece a criar os testes para algum desses serviços?
-Parabéns pelo projeto até aqui. A base é muito forte e, com essas melhorias, ele se tornará um case de portfólio de altíssimo nível.
+Parabéns pelo projeto até aqui. A base é muito forte e, com essas melhorias, ele se tornará um case de portfólio de altíssimo nível.3333
