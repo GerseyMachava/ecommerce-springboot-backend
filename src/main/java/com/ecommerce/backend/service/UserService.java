@@ -35,8 +35,8 @@ public class UserService {
     public UserResponseDto updateUser(long userId, RegisterRequestDto authDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException("No User Found with id " + userId, HttpStatus.NOT_FOUND));
-
-        if (userRepository.findByEmail(authDto.email()) != null) {
+        User foundByEmail = (User) userRepository.findByEmail(authDto.email());
+        if (foundByEmail != null && foundByEmail.getId() != user.getId()) {
             throw new BusinessException("Email already in use", HttpStatus.CONFLICT);
         }
         user.setEmail(authDto.email());
@@ -47,13 +47,13 @@ public class UserService {
 
     }
 
-    public void PasswordUpdate(UserPasswordUpdateRequestDto dto) {
+    public void passwordUpdate(UserPasswordUpdateRequestDto dto) {
         User userToUpdate = userRepository.findById(dto.userId())
                 .orElseThrow(
                         () -> new BusinessException("No User Found with id " + dto.userId(), HttpStatus.NOT_FOUND));
         User loggedUser = securityService.getAuthenticatedUser()
                 .orElseThrow(
-                        () -> new BusinessException("No User Found with id " + dto.userId(), HttpStatus.NOT_FOUND));
+                        () -> new BusinessException("User not authenticated", HttpStatus.NOT_FOUND));
         boolean isOwner = userToUpdate.equals(loggedUser);
         boolean isAdmin = loggedUser.getRole() == UserRole.ADMIN;
         if (!isOwner && !isAdmin) {

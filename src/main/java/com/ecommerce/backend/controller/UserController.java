@@ -2,6 +2,7 @@ package com.ecommerce.backend.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +32,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
-    public ResponseEntity<ApiResponse<List<UserResponseDto>>> getAllUsers() {
+    public ResponseEntity<ApiResponse<List<UserResponseDto>>> getAllUsers(){
         List<UserResponseDto> usersList = userService.getAllUsers();
      
         String message = usersList.isEmpty() ? "No users found" : "All users fetched successfully";
@@ -49,7 +50,7 @@ public class UserController {
 
     @PutMapping("/password")
     public ResponseEntity<ApiResponse<Void>> updatePassword(@RequestBody @Valid UserPasswordUpdateRequestDto dto) {
-         userService.PasswordUpdate(dto);
+         userService.passwordUpdate(dto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ApiResponse.success("user password updated",null, HttpStatus.OK));
 
