@@ -28,7 +28,7 @@ public class ProductCategoryService implements IProductCategoryService {
 
     private void existingValidator(ProductCategoryRequestDto requestDto) {
         if (productCategoryRepository.existsByCategoryIdAndProductId(requestDto.categoryId(), requestDto.productId())) {
-            throw new BusinessException("The product is already registred to this category", HttpStatus.CONFLICT);
+            throw new BusinessException("The product is already registered to this category", HttpStatus.CONFLICT);
         }
     }
 
@@ -54,7 +54,7 @@ public class ProductCategoryService implements IProductCategoryService {
     public ProductCategoryResponseDto update(Long id, ProductCategoryRequestDto requestDto) {
         existingValidator(requestDto);
         ProductCategory existingProductCategoty = productCategoryRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("ProductCategory not Found ", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new BusinessException("ProductCategory not Found", HttpStatus.NOT_FOUND));
         Product product = productService.getProduct(requestDto.productId());
         Category category = categoryService.getCategory(requestDto.categoryId());
         ProductCategory updatedProductCategory = productCategoryMapper.updateEntity(existingProductCategoty, product,
