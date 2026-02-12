@@ -37,8 +37,9 @@ public class CategoryService implements ICategoryService {
                     () -> new BusinessException("No Parent Category found with the id " + requestDto.parentCategoryId(),
                             HttpStatus.NOT_FOUND));
         }
-
+        
         Category category = categoryMapper.toEntity(requestDto, parentCategory);
+        validateParentCategory(category, parentCategory);
         categoryRepository.save(category);
         return categoryMapper.toResponseDto(category);
     }
@@ -52,15 +53,16 @@ public class CategoryService implements ICategoryService {
     @Override
     public CategoryResponseDto findById(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(
-                () -> new BusinessException("No  Category found with the id " + id,
+                () -> new BusinessException("No Category found with the id " + id,
                         HttpStatus.NOT_FOUND));
         return categoryMapper.toResponseDto(category);
     }
 
     @Override
     public CategoryResponseDto updateCategory(Long existingCategoryId, CategoryRequestDto requestDto) {
+
         Category existingCategory = categoryRepository.findById(existingCategoryId).orElseThrow(
-                () -> new BusinessException("No Category found with the id " + requestDto.parentCategoryId(),
+                () -> new BusinessException("No Category found with the id " + existingCategoryId,
                         HttpStatus.NOT_FOUND));
         if (categoryRepository.existsByNameAndIdNot(requestDto.name(), existingCategory.getId())) {
             throw new BusinessException("category with the name " + requestDto.name() + " Already exists",
@@ -74,6 +76,7 @@ public class CategoryService implements ICategoryService {
                             HttpStatus.NOT_FOUND));
         }
 
+        validateParentCategory(existingCategory, parentCategory);
         Category updatedCategory = categoryMapper.updateEntity(existingCategory, requestDto, parentCategory);
         return categoryMapper.toResponseDto(updatedCategory);
 
@@ -93,6 +96,27 @@ public class CategoryService implements ICategoryService {
                 () -> new BusinessException("No  Category found with the id " + id,
                         HttpStatus.NOT_FOUND));
         return category;
+    }
+
+    private void validateParentCategory(Category category, Category parent) {
+        if (parent == null)
+            return;
+
+        // Não pode ser pai de si mesmo
+        if (category.getId() != null && category.getId().equals(parent.getId())) {
+            throw new BusinessException("Category cannot be parent of itself",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        // Verificar ciclo (A -> B -> C -> A)
+        Category current = parent;
+        while (current != null) {
+            if (current.getId().equals(category.getId())) {
+                throw new BusinessException("Circular reference detected",
+                        HttpStatus.BAD_REQUEST);
+            }
+            current = current.getParentCategory();
+        }
     }
 
 }
