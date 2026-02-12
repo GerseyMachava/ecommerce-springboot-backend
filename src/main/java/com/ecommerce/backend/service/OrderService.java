@@ -62,7 +62,7 @@ public class OrderService {
         User user = securityService.getAuthenticatedUser()
                 .orElseThrow(() -> new BusinessException("user not found",
                         HttpStatus.NOT_FOUND));
-        List<CartItem> cartItems = cartItemService.getCartitems();
+        List<CartItem> cartItems = cartItemService.getCartItemsEntity();
 
         if (cartItems.isEmpty()) {
             throw new BusinessException("Cart is empty", HttpStatus.CONFLICT);
@@ -77,7 +77,7 @@ public class OrderService {
         newOrder.setOrderItems(orderItems);
         newOrder.setTotalAmount(calculateTotalAmount(orderItems));
         orderRepository.save(newOrder);
-        cartItemService.cleanAuthUserCartitems();
+        cartItemService.cleanAuthUserCartItems();
 
         return orderMapper.toResponseDto(newOrder);
     }

@@ -286,7 +286,7 @@ public class OrderServiceTest {
         void createOrderFromCart_WithValidCart_ShouldCreateOrder() {
                 // Arrange
                 when(securityService.getAuthenticatedUser()).thenReturn(Optional.of(user));
-                when(cartItemService.getCartitems()).thenReturn(cartItems);
+                when(cartItemService.getCartItemsEntity()).thenReturn(cartItems);
                 when(orderRepository.save(any(Order.class))).thenReturn(order);
                 when(orderMapper.toResponseDto(any(Order.class))).thenReturn(responseDto);
 
@@ -302,9 +302,9 @@ public class OrderServiceTest {
                 assertEquals(OrderStatus.PENDING, result.status());
 
                 verify(securityService).getAuthenticatedUser();
-                verify(cartItemService).getCartitems();
+                verify(cartItemService).getCartItemsEntity();
                 verify(orderRepository).save(any(Order.class));
-                verify(cartItemService).cleanAuthUserCartitems();
+                verify(cartItemService).cleanAuthUserCartItems();
                 verify(productService).updateStockQuantity(1L, 2);
         }
 
@@ -321,14 +321,14 @@ public class OrderServiceTest {
                 assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
 
                 verify(securityService).getAuthenticatedUser();
-                verify(cartItemService, never()).getCartitems();
+                verify(cartItemService, never()).getCartItemsEntity();
         }
 
         @Test
         void createOrderFromCart_WithEmptyCart_ShouldThrowBusinessException() {
                 // Arrange
                 when(securityService.getAuthenticatedUser()).thenReturn(Optional.of(user));
-                when(cartItemService.getCartitems()).thenReturn(List.of());
+                when(cartItemService.getCartItemsEntity()).thenReturn(List.of());
 
                 // Act & Assert
                 BusinessException exception = assertThrows(BusinessException.class,
@@ -338,7 +338,7 @@ public class OrderServiceTest {
                 assertEquals(HttpStatus.CONFLICT, exception.getHttpStatus());
 
                 verify(securityService).getAuthenticatedUser();
-                verify(cartItemService).getCartitems();
+                verify(cartItemService).getCartItemsEntity();
                 verify(orderRepository, never()).save(any());
         }
 
@@ -360,7 +360,7 @@ public class OrderServiceTest {
                 List<CartItem> problematicCartItems = List.of(problematicCartItem);
 
                 when(securityService.getAuthenticatedUser()).thenReturn(Optional.of(user));
-                when(cartItemService.getCartitems()).thenReturn(problematicCartItems);
+                when(cartItemService.getCartItemsEntity()).thenReturn(problematicCartItems);
 
                 // Act & Assert
                 BusinessException exception = assertThrows(BusinessException.class,
@@ -370,7 +370,7 @@ public class OrderServiceTest {
                 assertEquals(HttpStatus.CONFLICT, exception.getHttpStatus());
 
                 verify(securityService).getAuthenticatedUser();
-                verify(cartItemService).getCartitems();
+                verify(cartItemService).getCartItemsEntity();
                 verify(orderRepository, never()).save(any());
                 verify(productService, never()).updateStockQuantity(anyLong(), anyInt());
         }
@@ -398,7 +398,7 @@ public class OrderServiceTest {
 
                 // Simulando um cenário de criação de pedido
                 when(securityService.getAuthenticatedUser()).thenReturn(Optional.of(user));
-                when(cartItemService.getCartitems()).thenReturn(cartItems);
+                when(cartItemService.getCartItemsEntity()).thenReturn(cartItems);
                 when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> {
                         Order savedOrder = invocation.getArgument(0);
                         // Verifica se o total foi calculado corretamente
@@ -447,7 +447,7 @@ public class OrderServiceTest {
                 List<CartItem> multipleCartItems = List.of(cartItem1, cartItem2);
 
                 when(securityService.getAuthenticatedUser()).thenReturn(Optional.of(user));
-                when(cartItemService.getCartitems()).thenReturn(multipleCartItems);
+                when(cartItemService.getCartItemsEntity()).thenReturn(multipleCartItems);
                 when(orderRepository.save(any(Order.class))).thenReturn(order);
                 when(orderMapper.toResponseDto(any(Order.class))).thenReturn(orderResponseDto);
                 doNothing().when(productService).updateStockQuantity(anyLong(), anyInt());
@@ -466,7 +466,7 @@ public class OrderServiceTest {
         void createOrderFromCart_ShouldClearCartAfterSuccess() {
                 // Arrange
                 when(securityService.getAuthenticatedUser()).thenReturn(Optional.of(user));
-                when(cartItemService.getCartitems()).thenReturn(cartItems);
+                when(cartItemService.getCartItemsEntity()).thenReturn(cartItems);
                 when(orderRepository.save(any(Order.class))).thenReturn(order);
                 when(orderMapper.toResponseDto(any(Order.class))).thenReturn(orderResponseDto);
                 doNothing().when(productService).updateStockQuantity(anyLong(), anyInt());
@@ -475,14 +475,14 @@ public class OrderServiceTest {
                 orderService.createOrderFromCart();
 
                 // Assert
-                verify(cartItemService).cleanAuthUserCartitems();
+                verify(cartItemService).cleanAuthUserCartItems();
         }
 
         @Test
         void createOrderFromCart_ShouldNotClearCartOnFailure() {
                 // Arrange
                 when(securityService.getAuthenticatedUser()).thenReturn(Optional.of(user));
-                when(cartItemService.getCartitems()).thenReturn(cartItems);
+                when(cartItemService.getCartItemsEntity()).thenReturn(cartItems);
 
                 // Simula falha ao salvar o pedido
                 when(orderRepository.save(any(Order.class))).thenThrow(new RuntimeException("Database error"));
@@ -492,6 +492,6 @@ public class OrderServiceTest {
                 assertThrows(RuntimeException.class, () -> orderService.createOrderFromCart());
 
                 // Verifica que NÃO limpou o carrinho em caso de falha
-                verify(cartItemService, never()).cleanAuthUserCartitems();
+                verify(cartItemService, never()).cleanAuthUserCartItems();
         }
 }

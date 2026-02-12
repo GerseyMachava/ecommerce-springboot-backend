@@ -31,11 +31,11 @@ public class CartItemService {
     private final ProductService productService;
     private final SecurityService securityService;
     private final UserRepository userRepository;
-
+    
+    @Transactional
     public CartItemResponseDto addProductToCart(CartItemRequestDto requestDto) {
         User user = securityService.getAuthenticatedUser()
                 .orElseThrow(() -> new BusinessException("User not found ", HttpStatus.NOT_FOUND));
-        // Recarrega o User da sessão Hibernate para evitar detached entity exception
         user = userRepository.findById(user.getId())
                 .orElseThrow(() -> new BusinessException("User not found ", HttpStatus.NOT_FOUND));
         Cart userCart = cartService.findOrCreateCart(user);
@@ -73,12 +73,12 @@ public class CartItemService {
     }
 
     public List<CartItemResponseDto> getAuthCartItems() {
-        List<CartItem> cartItems = getCartitems();
+        List<CartItem> cartItems = getCartItemsEntity();
         return cartItems.stream().map(
                 cartItem -> mapper.toResponseDto(cartItem, cartItem.getQuantity())).toList();
     }
 
-    public List<CartItem> getCartitems() {
+    public  List<CartItem> getCartItemsEntity() {
         User user = securityService.getAuthenticatedUser()
                 .orElseThrow(() -> new BusinessException("User not found ", HttpStatus.NOT_FOUND));
         List<CartItem> cartItems = repository.findByCartUser(user);
@@ -102,7 +102,7 @@ public class CartItemService {
         repository.deleteAll(cartItems);
     }
 
-    public void cleanAuthUserCartitems() {
+    public void cleanAuthUserCartItems() {
         User user = securityService.getAuthenticatedUser()
                 .orElseThrow(() -> new BusinessException("User not found ", HttpStatus.NOT_FOUND));
         List<CartItem> cartItems = repository.findByCartUser(user);

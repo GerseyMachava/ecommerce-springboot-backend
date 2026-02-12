@@ -56,7 +56,7 @@ public class PaymentController {
     public ResponseEntity<ApiResponse<PaymentResponseDto>> tooglePaymentStatus(
             @RequestBody @Valid PaymentStatusUpdateRequest requestDto) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                ApiResponse.success("Payment updated", paymentService.tooglePaymentStatus(requestDto), HttpStatus.OK));
+                ApiResponse.success("Payment updated", paymentService.togglePaymentStatus(requestDto), HttpStatus.OK));
 
     }
 

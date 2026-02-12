@@ -80,7 +80,7 @@ public class CartItemController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_CUSTOMER' )")
     @DeleteMapping
     public ResponseEntity<ApiResponse<CartItemResponseDto>> cleanCartItem() {
-        service.cleanAuthUserCartitems();
+        service.cleanAuthUserCartItems();
         return ResponseEntity.status(HttpStatus.OK).body(
                 ApiResponse.success("Cart cleaned", null, HttpStatus.OK));
 

@@ -33,11 +33,11 @@ public class PaymentService {
         if (repository.existsByOrderId(order.getId())) {
             throw new BusinessException("Payment already done for this order", HttpStatus.CONFLICT);
         }
-        CheckAmount(order, requestDto);
+        validatePaymentAmount(order, requestDto);
         Payment newPayment = mapper.toEntity(requestDto, order);
-        repository.save(newPayment);
+        Payment savedPayment = repository.save(newPayment);
         eventPublisher.publishEvent(new PaymentCompletedEvent(order.getId(), newPayment.getId()));
-        return mapper.toResponseDto(repository.save(newPayment));
+        return mapper.toResponseDto(savedPayment);
     }
 
     public List<PaymentResponseDto> findAllPayments() {
@@ -45,7 +45,7 @@ public class PaymentService {
         return mapper.toResponseList(paymentList);
     }
 
-    public PaymentResponseDto tooglePaymentStatus(PaymentStatusUpdateRequest requestDto) {
+    public PaymentResponseDto togglePaymentStatus(PaymentStatusUpdateRequest requestDto) {
         Payment payment = repository.findById(requestDto.paymentId())
                 .orElseThrow(() -> new BusinessException("No payment found with the id: " + requestDto.paymentId(),
                         HttpStatus.NOT_FOUND));
@@ -68,7 +68,7 @@ public class PaymentService {
                 });
     }
 
-    private void CheckAmount(Order order, PaymentRequestDto requestDto) {
+    private void validatePaymentAmount(Order order, PaymentRequestDto requestDto) {
         BigDecimal orderAmount = order.getTotalAmount();
         BigDecimal paymentAmount = requestDto.amount();
 

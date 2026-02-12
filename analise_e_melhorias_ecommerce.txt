@@ -184,8 +184,8 @@ TESTES UNITÁRIOS (Services)
 ✅ addItemToCart - item novo e com quantidade
 ✅ removeItemFromCart - item existente
 ✅ updateQuantity - aumentar/diminuir quantidade
-✅ getCartitems - listar itens do carrinho
-✅ cleanAuthUserCartitems - limpar carrinho
+✅ getCartItemsEntity - listar itens do carrinho
+✅ cleanAuthUserCartItems - limpar carrinho
 5. UserServiceTest
 ✅ getAllUsers - retornar lista de usuários
 ✅ updateUser - atualizar email (validar duplicação)
