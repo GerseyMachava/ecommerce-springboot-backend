@@ -1,37 +1,59 @@
-Modulos 
+# Planejamento do Projeto E-commerce Backend
 
-Módulos:
-1. Catálogo de produtos
-2. Gerenciamento de usuários
-3. Carrinho de compras
-4. Processamento de pedidos
-5. Sistema de pagamento (simulado)
-6. Avaliações de produtos
-
-
-
-
-## 🔄 **Processo de Desenvolvimento Sugerido**
-
-1. **Semana 1**: Setup + Entidades básicas (Produto, Categoria)
-2. **Semana 2**: CRUD completo com validações
-3. **Semana 3**: Autenticação e autorização
-4. **Semana 4**: Carrinho e pedidos
-5. **Semana 5**: Testes e documentação
-6. **Semana 6**: Features extras (cache, logs, docker)
-
-## ❓ **Quando tiver dúvidas, pergunte-se:**
-
-1. "Esta solução é escalável?"
-2. "Como isso se comporta com 1000 requisições simultâneas?"
-3. "Onde posso aplicar um design pattern?"
-4. "Como testar essa funcionalidade?"
-5. "Estou seguindo os princípios SOLID?"
+Este documento serve como o roadmap de desenvolvimento do seu projeto, focado em demonstrar senioridade técnica para portfólio.
 
 ---
 
-**Próximo passo:** Comece criando o repositório no GitHub e me mostre sua estrutura inicial de pacotes. Vamos revisar juntos antes de escrever qualquer código.
+## 🚀 **Módulos de Negócio**
+1. **Catálogo de produtos:** CRUD completo, upload de imagens, filtros e paginação.
+2. **Gerenciamento de usuários:** Autenticação JWT, perfis (ADMIN/USER), recuperação de senha.
+3. **Carrinho de compras:** Adição/remoção de itens e cálculo de totais.
+4. **Processamento de pedidos:** Fechamento de pedidos, histórico e status.
+5. **Sistema de pagamento:** Simulação de checkout com eventos assíncronos.
+6. **Avaliações de produtos:** Sistema de reviews e notas (Estrelas).
 
-**Lembre-se:** O objetivo não é apenas funcionar, mas demonstrar **bom senso técnico** e **capacidade de tomar decisões arquiteturais**.
+---
 
-Quer começar com alguma dúvida específica ou prefere que aprofundemos algum tópico?3333
+## 🛠️ **Módulos de Infraestrutura & Boas Práticas (Diferencial Sênior)**
+
+1. **Documentação Automática:**
+   - [ ] Implementar **Swagger/OpenAPI (Springdoc)** para documentação interativa da API.
+2. **Gestão de Banco de Dados:**
+   - [ ] Substituir `ddl-auto=update` por **Flyway/Liquibase** para migrações versionadas.
+3. **Dockerização & DevOps:**
+   - [ ] Criar **Dockerfile** multi-stage para a aplicação.
+   - [ ] Configurar **Docker Compose** (Java + MySQL + Redis).
+   - [ ] Configurar **GitHub Actions** para CI/CD (Build & Tests).
+4. **Resiliência & Performance:**
+   - [ ] Implementar **Caching com Redis** para consultas pesadas (ex: categorias).
+   - [ ] Adicionar **Soft Delete** em entidades críticas (Produtos/Pedidos).
+5. **Observabilidade:**
+   - [ ] Ativar **Spring Boot Actuator** para monitoramento de saúde da API.
+   - [ ] Configurar logs estruturados com SLF4J/Logback.
+6. **Testes de Alta Qualidade:**
+   - [ ] Cobertura de testes unitários com JUnit 5 e Mockito.
+   - [ ] Testes de integração reais usando **Testcontainers** (MySQL real no Docker).
+
+---
+
+## 🔄 **Processo de Desenvolvimento Sugerido**
+
+1. **Semana 1**: Setup + Entidades básicas (Produto, Categoria) + Flyway inicial.
+2. **Semana 2**: CRUD completo com validações + Paginação + Upload de Imagens.
+3. **Semana 3**: Autenticação, Autorização e Documentação (Swagger).
+4. **Semana 4**: Carrinho, Pedidos e Eventos de Pagamento.
+5. **Semana 5**: Testes Unitários e de Integração (Testcontainers).
+6. **Semana 6**: Docker, Caching (Redis) e Observabilidade (Actuator).
+
+---
+
+## ❓ **Quando tiver dúvidas, pergunte-se:**
+1. "Esta solução é escalável?"
+2. "Como isso se comporta com 1000 requisições simultâneas?"
+3. "Onde posso aplicar um design pattern?"
+4. "Como testar essa funcionalidade de forma automatizada?"
+5. "Estou seguindo os princípios SOLID e DRY?"
+
+---
+
+**Objetivo Final:** O foco não é apenas "fazer funcionar", mas demonstrar **bom senso técnico**, **capacidade de tomar decisões arquiteturais** e **domínio do ecossistema moderno de backend Java**.

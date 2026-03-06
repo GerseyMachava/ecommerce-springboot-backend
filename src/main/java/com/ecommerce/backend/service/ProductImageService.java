@@ -18,9 +18,9 @@ import com.ecommerce.backend.model.Product;
 import com.ecommerce.backend.model.ProductImage;
 import com.ecommerce.backend.repository.ProductImageRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class ProductImageService {
     
@@ -30,9 +30,9 @@ public class ProductImageService {
     @Value("${file.upload-dir:uploads/images}")
     private String uploadDir;
 
-    private ProductService productService;
-    private ProductImageRepository repository;
-    private ProductImageMapper mapper;
+    private final ProductService productService;
+    private final ProductImageRepository repository;
+    private final ProductImageMapper mapper;
 
     public ProductImageResponseDto saveImage(Long productid, MultipartFile file) throws IOException {
         // Validar tipo

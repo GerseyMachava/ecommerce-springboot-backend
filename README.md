@@ -1,110 +1,95 @@
-# E-commerce Spring Boot Backend
+# 🛒 E-commerce Spring Boot Backend
 
-A simple RESTful API for an e-commerce application built with Spring Boot.
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+![Swagger](https://img.shields.io/badge/-Swagger-%23C1272D?style=for-the-badge&logo=swagger&logoColor=white)
 
-## Technologies Used
+A robust, scalable, and secure RESTful API for an E-commerce platform built with **Java 21** and **Spring Boot 3**. This project demonstrates advanced backend patterns, including event-driven architecture, role-based access control (RBAC), and automated documentation.
 
-*   **Java 21**: The core programming language.
-*   **Spring Boot**: The framework for building the application.
-*   **Spring Data JPA**: For data persistence and database interaction.
-*   **Spring Security**: For authentication and authorization.
-*   **PostgreSQL**: The relational database.
-*   **Maven**: For dependency management and building the project.
-*   **Lombok**: To reduce boilerplate code.
+---
 
-## Features
+## 🚀 Key Features
 
-_(This section can be filled in as features are added.)_
+*   **🔒 Security & Auth:** Complete Authentication and Authorization system using **JWT (JSON Web Tokens)** and Role-Based Access Control (Admin, User, Customer).
+*   **📦 Product Management:** Advanced catalog management with pagination, sorting, dynamic search, and category filtering.
+*   **🛒 Shopping Cart:** Real-time cart management with stock validation.
+*   **🧾 Order & Checkout:** Order processing with automated status updates.
+*   **⚡ Event-Driven Logic:** Decoupled business logic using **Domain Events** (e.g., `PaymentCompletedEvent`) and Listeners.
+*   **🖼️ Image Handling:** Integrated system for product image uploads and management.
+*   **🛡️ Robust Error Handling:** Centralized exception handling with clear, standardized API responses.
+*   **🗺️ Object Mapping:** High-performance DTO mapping using **MapStruct**.
 
-*   ...
-*   ...
-*   ...
+---
 
-## Prerequisites
+## 🛠️ Technical Stack
 
-Before you begin, ensure you have met the following requirements:
+*   **Backend:** Java 21, Spring Boot 3.2.5
+*   **Persistence:** Spring Data JPA, Hibernate 6
+*   **Database:** MySQL 8
+*   **Security:** Spring Security, Auth0 JWT
+*   **Documentation:** Swagger UI (Springdoc OpenAPI)
+*   **Validation:** Jakarta Bean Validation
+*   **Tools:** Lombok, MapStruct, Maven
 
-*   You have installed a recent version of the **Java Development Kit (JDK)** (version 21 or higher).
-*   You have a **PostgreSQL** database running.
-*   You have **Maven** installed.
+---
 
-## Installation and Setup
+## 🏗️ Architecture
 
-1.  **Clone the repository:**
+The project follows the **Layered Architecture** pattern and **SOLID** principles to ensure maintainability and testability:
 
-    ```bash
-    git clone https://github.com/your-username/ecommerce-springboot-backend.git
-    cd ecommerce-springboot-backend
-    ```
+1.  **Controllers:** REST endpoints handling HTTP requests.
+2.  **DTOs (Data Transfer Objects):** Using **Java Records** for immutable data transfer.
+3.  **Services:** Business logic layer with interface-based design.
+4.  **Repositories:** Data access layer using Spring Data JPA.
+5.  **Mappers:** Decoupling entities from DTOs via MapStruct.
 
-2.  **Configure the database:**
+---
 
-    Open the `src/main/resources/application.properties` file and update the following properties to match your PostgreSQL database configuration:
+## 📝 API Documentation
 
-    ```properties
-    spring.datasource.url=jdbc:postgresql://localhost:5432/your-database-name
-    spring.datasource.username=your-username
-    spring.datasource.password=your-password
-    spring.jpa.hibernate.ddl-auto=update
-    ```
+Once the application is running, you can explore the interactive API documentation (Swagger) at:
+`http://localhost:8080/swagger-ui.html`
 
-3.  **Install dependencies:**
+---
 
-    ```bash
-    mvn install
-    ```
+## ⚙️ Getting Started
 
-## How to Run
+### Prerequisites
+*   JDK 21 or higher
+*   MySQL 8.0+
+*   Maven 3.x
 
-To run the application, use the following command:
+### Setup
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/GerseyMachava/ecommerce-springboot-backend.git
+   ```
+2. **Configure Database:**
+   Update `src/main/resources/application.properties` with your MySQL credentials:
+   ```properties
+   spring.datasource.url=jdbc:mysql://localhost:3306/ecommerce
+   spring.datasource.username=your_username
+   spring.datasource.password=your_password
+   ```
+3. **Run the Application:**
+   ```bash
+   mvn spring-boot:run
+   ```
 
-```bash
-mvn spring-boot:run
-```
+---
 
-The application will start on port 8080 by default.
+## 🛤️ Roadmap & Improvements
 
-## API Endpoints
+- [ ] **Dockerization:** Add Dockerfile and Docker Compose for easy deployment.
+- [ ] **Database Migrations:** Integrate Flyway to manage schema changes.
+- [ ] **Caching:** Implement Redis for frequently accessed product categories.
+- [ ] **Testing:** Expand unit and integration test coverage (JUnit 5 & Mockito).
 
-_(This section can be filled in as endpoints are created.)_
+---
 
-*   **...**
-    *   `GET /api/...`: ...
-    *   `POST /api/...`: ...
-*   **...**
-    *   `GET /api/...`: ...
-    *   `PUT /api/...`: ...
-    *   `DELETE /api/...`: ...
-
-## Configuration
-
-All application configuration is located in the `src/main/resources/application.properties` file. You can modify database settings, server port, and other Spring Boot properties in this file.
-
-## Project Structure
-
-The project follows a standard Spring Boot project structure:
-
-```
-.
-├── src
-│   ├── main
-│   │   ├── java
-│   │   │   └── com
-│   │   │       └── ecommerce
-│   │   │           └── backend
-│   │   │               ├── config
-│   │   │               ├── controller
-│   │   │               ├── dto
-│   │   │               ├── exception
-│   │   │               ├── mapper
-│   │   │               ├── model
-│   │   │               ├── repository
-│   │   │               ├── security
-│   │   │               └── service
-│   │   └── resources
-│   │       ├── static
-│   │       ├── templates
-│   │       └── application.properties
-│   └── test
-└── pom.xml
-```
+## 👤 Author
+**Gersey Machava**
+*   GitHub: [@GerseyMachava](https://github.com/GerseyMachava)
+*   LinkedIn: [Gersey Machava](https://www.linkedin.com/in/gersey-machava/)

@@ -22,14 +22,22 @@ import com.ecommerce.backend.dto.requestDto.ProductRequestDto;
 import com.ecommerce.backend.service.ProductService;
 import com.ecommerce.backend.shared.apiResponse.ApiResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/products")
+@Tag(name = "Product Controller", description = "Endpoints for managing products in the e-commerce application")
 public class ProductController {
         private final ProductService productService;
+
+        @Operation(description = "Get a paginated list of products", summary = "Get all products with pagination and sorting", responses = {
+                        @io.swagger.v3.oas.annotations.responses.ApiResponse(description = "success", responseCode = "200"),
+                        @io.swagger.v3.oas.annotations.responses.ApiResponse(description = "Unauthorized", responseCode = "401")
+        })
 
         @GetMapping()
         public ResponseEntity<ApiResponse<ProductResponseListDto>> index(
