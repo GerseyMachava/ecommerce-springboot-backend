@@ -92,4 +92,4 @@ Once the application is running, you can explore the interactive API documentati
 ## 👤 Author
 **Gersey Machava**
 *   GitHub: [@GerseyMachava](https://github.com/GerseyMachava)
-*   LinkedIn: [Gersey Machava](https://www.linkedin.com/in/gersey-machava/)
+*   LinkedIn: [Gersey Machava](www.linkedin.com/in/gersey-machava-4a8852270)
